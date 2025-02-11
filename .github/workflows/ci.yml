@@ -50,7 +50,9 @@ jobs:
         run: npm run ci-test --passWithNoTests
 
   test-frp-action-client-config:
-    if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.fork == false
+    if:
+      github.event_name != 'pull_request' ||
+      github.event.pull_request.head.repo.fork == false
     concurrency:
       group: frp-client-config-tests--${{ matrix.os-version }}
       cancel-in-progress: false
@@ -95,7 +97,9 @@ jobs:
           FRP_REMOTE_PORT: ${{ matrix.port }}
 
   test-frp-action-with-args:
-    if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.fork == false
+    if:
+      github.event_name != 'pull_request' ||
+      github.event.pull_request.head.repo.fork == false
     concurrency:
       group: frp-with-args-tests--${{ matrix.os-version }}
       cancel-in-progress: false
