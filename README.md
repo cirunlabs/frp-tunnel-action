@@ -50,7 +50,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Start frp tunnel
-        uses: cirunlabs/frp-tunnel-action@1.0
+        uses: cirunlabs/frp-tunnel-action@v1.2.0
         with:
           timeout_minutes: 1
           frp_server: <your-frp-server>
@@ -70,7 +70,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Start frp tunnel
-        uses: cirunlabs/frp-tunnel-action@1.0
+        uses: cirunlabs/frp-tunnel-action@v1.2.0
         with:
           timeout_minutes: '60'
           frp_client_config: |
