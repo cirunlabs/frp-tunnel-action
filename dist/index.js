@@ -31244,10 +31244,19 @@ async function fetchGitHubSSHKeys(username) {
         const url = `https://github.com/${username}.keys`;
         coreExports.info(`Fetching SSH keys from ${url}...`);
         const response = await fetch(url);
-        if (!response.ok)
+        if (!response.ok) {
+            if (response.status === 404) {
+                coreExports.warning(`User ${username} does not have any SSH keys.`);
+                return [];
+            }
             throw new Error(`Failed to fetch keys: ${response.statusText}`);
+        }
         const keys = await response.text();
-        return keys.split('\n').filter((key) => key.trim().length > 0);
+        const filteredKeys = keys.split('\n').filter((key) => key.trim().length > 0);
+        if (filteredKeys.length === 0) {
+            coreExports.warning(`User ${username} has no SSH keys.`);
+        }
+        return filteredKeys;
     }
     catch (error) {
         coreExports.warning(`Could not fetch SSH keys for ${username}: ${error}`);
