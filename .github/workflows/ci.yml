@@ -1,0 +1,134 @@
+name: Continuous Integration
+
+on:
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+env:
+  # It's the dns entry for the frp server running on fly.dev
+  # Can't use fly.dev subdomain as it enforce https, and we are using http here.
+  FRP_SERVER: frp-github-actions.iakte.ch
+  FRPC_LOCAL_PORT: 5000
+
+jobs:
+  test-typescript:
+    name: TypeScript Tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        id: checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        id: setup-node
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: .node-version
+          cache: npm
+
+      - name: Install Dependencies
+        id: npm-ci
+        run: npm ci
+
+      - name: Check Format
+        id: npm-format-check
+        run: npm run format:check
+
+      - name: Lint
+        id: npm-lint
+        run: npm run lint
+
+      - name: Test
+        id: npm-ci-test
+        run: npm run ci-test --passWithNoTests
+
+  test-frp-action-client-config:
+    concurrency:
+      group: frp-client-config-tests--${{ matrix.os-version }}
+      cancel-in-progress: false
+    strategy:
+      matrix:
+        os-version:
+          - ubuntu-latest
+          - macos-latest
+        include:
+          - os-version: ubuntu-latest
+            port: 6000
+          - os-version: macos-latest
+            port: 6001
+    name: FRP Action with client config
+    runs-on: ${{ matrix.os-version }}
+    steps:
+      - name: Checkout
+        id: checkout
+        uses: actions/checkout@v4
+
+      - name: Test Local Action
+        id: test-action
+        uses: ./
+        with:
+          timeout_minutes: 1
+          frp_client_config: |
+            serverAddr = "{{ .Envs.FRP_SERVER }}"
+            serverPort = 7000
+            auth.token = "${{ secrets.FRP_TOKEN }}"
+
+            [[proxies]]
+            name = "github-runner-${{ matrix.os-version}}-${{ github.run_id }}-${{ github.sha }}"
+            type = "tcp"
+            localIP = "127.0.0.1"
+            localPort = {{ .Envs.FRPC_LOCAL_PORT }}
+            remotePort = ${{ matrix.port }}
+
+      - name: Test frp server connection
+        run: |
+          ./test_frp_connection.sh
+        env:
+          FRP_REMOTE_PORT: ${{ matrix.port }}
+
+  test-frp-action-with-args:
+    concurrency:
+      group: frp-with-args-tests--${{ matrix.os-version }}
+      cancel-in-progress: false
+    strategy:
+      matrix:
+        os-version:
+          - ubuntu-latest
+          - macos-latest
+        include:
+          - os-version: ubuntu-latest
+            port: 6002
+          - os-version: macos-latest
+            port: 6003
+    name: FRP Action with Arguments
+    runs-on: ${{ matrix.os-version }}
+    steps:
+      - name: Checkout
+        id: checkout
+        uses: actions/checkout@v4
+      - name: Test Local Action
+        id: test-action
+        uses: ./
+        with:
+          timeout_minutes: 1
+          frp_server: ${{ env.FRP_SERVER}}
+          frp_server_port: 7000
+          protocol: 'tcp'
+          frp_token: ${{ secrets.FRP_TOKEN }}
+          local_ip: '127.0.0.1'
+          local_port: 5000
+          remote_port: ${{ matrix.port }}
+          frp_version: '0.61.1'
+
+      - name: Test frp server connection
+        run: |
+          ./test_frp_connection.sh
+        env:
+          FRP_REMOTE_PORT: ${{ matrix.port }}

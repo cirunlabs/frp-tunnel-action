@@ -1,0 +1,55 @@
+name: frp-tunnel-action
+description: Get public access to any port on GitHub Actions runner
+author: aktech
+
+branding:
+  icon: cloud
+  color: blue
+
+inputs:
+  frp_server:
+    description: The address of the FRP server (e.g., frp.example.com)
+    required: false
+  frp_server_port:
+    description: The port FRP server listens on (default is 7000)
+    required: false
+  frp_token:
+    description: Authentication token for FRP
+    required: false
+  local_port:
+    description: The port on the GitHub Actions runner to expose
+    required: false
+  local_ip:
+    description: The IP address on the GitHub Actions runner to expose
+    required: false
+    default: '127.0.0.1'
+  remote_port:
+    description: The remote public port to expose on the FRP server
+    required: false
+  protocol:
+    description:
+      The protocol ("type" param for frp client config) to use for the exposed
+      service (default is tcp)
+    required: false
+    default: 'tcp'
+  frp_version:
+    description: The version of FRP to use (default is 0.51.3)
+    required: false
+    default: '0.61.1'
+  timeout_minutes:
+    description: The maximum duration to keep the action alive (in minutes)
+    required: false
+    default: '2'
+  frp_client_config:
+    description: |
+      Full FRPC client configuration in INI format.
+      If provided, this will be used instead of local_port and remote_port.
+    required: false
+
+outputs:
+  public_url:
+    description: The public URL of the exposed service
+
+runs:
+  using: node20
+  main: dist/index.js
