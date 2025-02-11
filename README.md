@@ -49,15 +49,14 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      - name: Start FRP
-        uses: aktech/frp-tunnel-action@v1
+      - name: Start frp tunnel
+        uses: cirunlabs/frp-tunnel-action@1.0
         with:
-          frp_server: 'frp.example.com or your-frp-server-ip'
-          frp_port: '7000'
-          frp_token: 'your-secret-token'
-          local_port: '22'
-          remote_port: '10022'
-          timeout_minutes: '60'
+          timeout_minutes: 1
+          frp_server: <your-frp-server>
+          frp_token: ${{ secrets.FRP_TOKEN }}
+          local_port: 22
+          remote_port: 6000
 ```
 
 ### Example Workflow with full frp client configuration
@@ -70,8 +69,8 @@ jobs:
   access-runner-via-frp:
     runs-on: ubuntu-latest
     steps:
-      - name: Start FRP with custom config
-        uses: aktech/frp-tunnel-action@v1
+      - name: Start frp tunnel
+        uses: cirunlabs/frp-tunnel-action@1.0
         with:
           timeout_minutes: '60'
           frp_client_config: |
