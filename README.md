@@ -40,7 +40,7 @@ remote SSH access or public access to any service running on the GitHub runner.
 ### Example Workflow
 
 This example exposes port **22** (SSH) from the GitHub Actions runner and maps
-it to **port 10022** on the FRP server.
+it to **port 6000** on the FRP server.
 
 ```yaml
 name: FRP Access
@@ -64,6 +64,9 @@ jobs:
 ```
 
 ### Example Workflow with full frp client configuration
+This example exposes port **22** (SSH) from the GitHub Actions runner and maps
+it to **port 6000** on the FRP server and port **8080** to port **8080** on frp
+server.
 
 ```yaml
 name: FRP Access
@@ -86,7 +89,7 @@ jobs:
             [ssh]
             type = tcp
             local_port = 22
-            remote_port = 10022
+            remote_port = 6000
 
             [web]
             type = http
