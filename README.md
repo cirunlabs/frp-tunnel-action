@@ -64,6 +64,7 @@ jobs:
 ```
 
 ### Example Workflow with full frp client configuration
+
 This example exposes port **22** (SSH) from the GitHub Actions runner and maps
 it to **port 6000** on the FRP server and port **8080** to port **8080** on frp
 server.
