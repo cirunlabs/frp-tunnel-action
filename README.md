@@ -1,5 +1,9 @@
 # FRP Access GitHub Action
 
+[![Continuous Integration](https://github.com/cirunlabs/frp-tunnel-action/actions/workflows/ci.yml/badge.svg)](https://github.com/cirunlabs/frp-tunnel-action/actions/workflows/ci.yml)
+[![Lint Codebase](https://github.com/cirunlabs/frp-tunnel-action/actions/workflows/linter.yml/badge.svg)](https://github.com/cirunlabs/frp-tunnel-action/actions/workflows/linter.yml)
+[![Check Transpiled JavaScript](https://github.com/cirunlabs/frp-tunnel-action/actions/workflows/check-dist.yml/badge.svg)](https://github.com/cirunlabs/frp-tunnel-action/actions/workflows/check-dist.yml)
+
 ## Overview
 
 **FRP Access** is a GitHub Action that allows you to expose a port from a GitHub
