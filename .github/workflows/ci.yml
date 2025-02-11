@@ -50,6 +50,7 @@ jobs:
         run: npm run ci-test --passWithNoTests
 
   test-frp-action-client-config:
+    if: github.repository == 'cirunlabs/frp-tunnel-action'
     concurrency:
       group: frp-client-config-tests--${{ matrix.os-version }}
       cancel-in-progress: false
@@ -94,6 +95,7 @@ jobs:
           FRP_REMOTE_PORT: ${{ matrix.port }}
 
   test-frp-action-with-args:
+    if: github.repository == 'cirunlabs/frp-tunnel-action'
     concurrency:
       group: frp-with-args-tests--${{ matrix.os-version }}
       cancel-in-progress: false
