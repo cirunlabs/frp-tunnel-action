@@ -31,6 +31,12 @@ remote SSH access or public access to any service running on the GitHub runner.
 - ⏳ **Supports configurable timeout** for the session duration
 - 🔧 **Works with any FRP server** with authentication
 
+
+![github actions runner logs screenshot](https://github.com/user-attachments/assets/46a9d644-8dda-4364-a535-aaa7a89d1dff)
+
+<img src="https://github.com/user-attachments/assets/270dc5f8-a934-483e-9ba7-1341798b73a3" alt="FRP Server Dashboard Screenshot" width="1000">
+
+
 ## Usage
 
 ### Example Workflow
