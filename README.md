@@ -57,8 +57,8 @@ jobs:
         uses: cirunlabs/frp-tunnel-action@v1.2.0
         with:
           timeout_minutes: 1
-          frp_server: <your-frp-server>
-          frp_token: ${{ secrets.FRP_TOKEN }}
+          frp_server: '{{ secrets.FRP_SERVER }}'
+          frp_token: '${{ secrets.FRP_TOKEN }}'
           local_port: 22
           remote_port: 6000
 ```
@@ -82,20 +82,24 @@ jobs:
         with:
           timeout_minutes: '60'
           frp_client_config: |
-            [common]
-            server_addr = frp.example.com
-            server_port = 7000
-            token = your-secret-token
+            serverAddr = "{{ secrets.FRP_SERVER }}"
+            serverPort = 7000
+            auth.method = "token"
+            auth.token = "${{ secrets.FRP_TOKEN }}"
 
-            [ssh]
+            [[proxies]]
+            name = "github-runner-ssh--${{ github.run_id }}-${{ github.sha }}"
             type = tcp
-            local_port = 22
-            remote_port = 6000
+            localIP = "127.0.0.1"
+            localPort = 22
+            remotePort = 6000
 
-            [web]
+            [[proxies]]
+            name = "github-runner-http--${{ github.run_id }}-${{ github.sha }}"
             type = http
-            local_port = 8080
-            remote_port = 8080
+            localIP = "127.0.0.1"
+            localPort = 8080
+            remotePort = 8080
 ```
 
 ## Inputs
