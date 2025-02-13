@@ -57,8 +57,8 @@ jobs:
         uses: cirunlabs/frp-tunnel-action@v1.2.0
         with:
           timeout_minutes: 1
-          frp_server: "{{ secrets.FRP_SERVER }}"
-          frp_token: "${{ secrets.FRP_TOKEN }}"
+          frp_server: '{{ secrets.FRP_SERVER }}'
+          frp_token: '${{ secrets.FRP_TOKEN }}'
           local_port: 22
           remote_port: 6000
 ```
