@@ -117,6 +117,15 @@ jobs:
 | `timeout_minutes`   | The maximum duration to keep the action alive (minutes)                                                             | ❌ No    | 2                                           |
 | `ssh_users`         | List of GitHub usernames whose SSH keys should be added to the runner.                                              | ❌ No    | `${{ github.actor }}` (default runner user) |
 
+<!-- prettier-ignore-start -->
+> [!DANGER]
+> ⚠️ Security Warning: SSH Access
+> ❗ Using the `ssh_users` input grants the specified GitHub users SSH access to the GitHub Actions runner.
+> - Only use trusted GitHub usernames.
+> - Make sure you understand the security implications before enabling SSH access.
+> - If misconfigured, anyone with the SSH key can access your runner, potentially leading to unauthorized access or secret leaks.
+<!-- prettier-ignore-end -->
+
 ### 🔧 Input Requirements
 
 - Either `frp_client_config` OR both `local_port` and `remote_port` must be
