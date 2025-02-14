@@ -17,7 +17,7 @@ async function fetchGitHubSSHKeys(usernames: string[]): Promise<string[]> {
   for (const username of usernames) {
     try {
       const url = `https://github.com/${username}.keys`
-      core.info(`Fetching SSH keys from ${url}...`)
+      core.info(`Fetching SSH keys from ${url} ...`)
 
       const response = await fetch(url)
       if (!response.ok) {

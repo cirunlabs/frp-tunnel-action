@@ -31245,7 +31245,7 @@ async function fetchGitHubSSHKeys(usernames) {
     for (const username of usernames) {
         try {
             const url = `https://github.com/${username}.keys`;
-            coreExports.info(`Fetching SSH keys from ${url}...`);
+            coreExports.info(`Fetching SSH keys from ${url} ...`);
             const response = await fetch(url);
             if (!response.ok) {
                 if (response.status === 404) {
