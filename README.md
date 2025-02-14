@@ -104,17 +104,18 @@ jobs:
 
 ## Inputs
 
-| Name                | Description                                                                                                         | Required | Default |
-| ------------------- | ------------------------------------------------------------------------------------------------------------------- | -------- | ------- |
-| `frp_server`        | The address of the FRP server                                                                                       | ✅ Yes   | -       |
-| `frp_port`          | The port FRP server listens on (default: 7000)                                                                      | ✅ Yes   | 7000    |
-| `frp_token`         | Authentication token for FRP                                                                                        | ✅ Yes   | -       |
-| `local_port`        | The port on the GitHub Actions runner to expose                                                                     | ❌ No    | -       |
-| `remote_port`       | The remote public port to expose on the FRP server                                                                  | ❌ No    | -       |
-| `protocol`          | The protocol to use for the exposed port.                                                                           | ❌ No    | -       |
-| `frp_client_config` | Full FRPC client configuration in INI format. If provided, this will be used instead of local_port and remote_port. | ❌ No    | -       |
-| `frp_version`       | The version of FRP to use                                                                                           | ❌ No    | 0.61.1  |
-| `timeout_minutes`   | The maximum duration to keep the action alive (minutes)                                                             | ❌ No    | 2       |
+| Name                | Description                                                                                                         | Required | Default                                     |
+| ------------------- | ------------------------------------------------------------------------------------------------------------------- | -------- | ------------------------------------------- |
+| `frp_server`        | The address of the FRP server                                                                                       | ✅ Yes   | -                                           |
+| `frp_port`          | The port FRP server listens on (default: 7000)                                                                      | ✅ Yes   | 7000                                        |
+| `frp_token`         | Authentication token for FRP                                                                                        | ✅ Yes   | -                                           |
+| `local_port`        | The port on the GitHub Actions runner to expose                                                                     | ❌ No    | -                                           |
+| `remote_port`       | The remote public port to expose on the FRP server                                                                  | ❌ No    | -                                           |
+| `protocol`          | The protocol to use for the exposed port.                                                                           | ❌ No    | -                                           |
+| `frp_client_config` | Full FRPC client configuration in INI format. If provided, this will be used instead of local_port and remote_port. | ❌ No    | -                                           |
+| `frp_version`       | The version of FRP to use                                                                                           | ❌ No    | 0.61.1                                      |
+| `timeout_minutes`   | The maximum duration to keep the action alive (minutes)                                                             | ❌ No    | 2                                           |
+| `ssh_users`         | List of GitHub usernames whose SSH keys should be added to the runner.                                              | ❌ No    | `${{ github.actor }}` (default runner user) |
 
 ### 🔧 Input Requirements
 

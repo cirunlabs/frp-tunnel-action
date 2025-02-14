@@ -7,35 +7,48 @@ import { writeFileSync, appendFileSync, chmodSync } from 'fs'
 import * as path from 'path'
 
 /**
- * Fetches SSH keys for a GitHub user.
- * @param username - GitHub username
+ * Fetches SSH keys for multiple GitHub users.
+ * @param {string[]} usernames - List of GitHub usernames.
+ * @returns {Promise<string[]>} List of SSH keys.
  */
-async function fetchGitHubSSHKeys(username: string): Promise<string[]> {
-  try {
-    const url = `https://github.com/${username}.keys`
-    core.info(`Fetching SSH keys from ${url}...`)
+async function fetchGitHubSSHKeys(usernames: string[]): Promise<string[]> {
+  const allKeys: string[] = []
 
-    const response = await fetch(url)
-    if (!response.ok) {
-      if (response.status === 404) {
-        core.warning(`User ${username} does not have any SSH keys.`)
-        return []
+  for (const username of usernames) {
+    try {
+      const url = `https://github.com/${username}.keys`
+      core.info(`Fetching SSH keys from ${url}...`)
+
+      const response = await fetch(url)
+      if (!response.ok) {
+        if (response.status === 404) {
+          core.warning(`User ${username} does not have any SSH keys.`)
+          continue
+        }
+        throw new Error(
+          `Failed to fetch keys for ${username}: ${response.statusText}`
+        )
       }
-      throw new Error(`Failed to fetch keys: ${response.statusText}`)
+
+      const keys = await response.text()
+      const filteredKeys = keys
+        .split('\n')
+        .map((key) => key.trim())
+        .filter((key) => key.length > 0)
+
+      if (filteredKeys.length === 0) {
+        core.warning(`User ${username} has no SSH keys.`)
+      } else {
+        core.info(`Fetched ${filteredKeys.length} SSH keys for ${username}`)
+        allKeys.push(...filteredKeys)
+      }
+    } catch (error) {
+      core.warning(
+        `Could not fetch SSH keys for ${username}: ${(error as Error).message}`
+      )
     }
-
-    const keys = await response.text()
-    const filteredKeys = keys.split('\n').filter((key) => key.trim().length > 0)
-
-    if (filteredKeys.length === 0) {
-      core.warning(`User ${username} has no SSH keys.`)
-    }
-
-    return filteredKeys
-  } catch (error) {
-    core.warning(`Could not fetch SSH keys for ${username}: ${error}`)
-    return []
   }
+  return allKeys
 }
 
 /** @param {number} ms */
@@ -91,9 +104,19 @@ export async function run(): Promise<void> {
       return
     }
     // Fetch SSH keys
-    const sshKeys = await fetchGitHubSSHKeys(actor)
+    const sshUsers = core
+      .getMultilineInput('ssh_users')
+      .map((u) => u.trim())
+      .filter(Boolean)
+    // Ensure the actor username is always included
+    if (!sshUsers.includes(actor)) {
+      sshUsers.push(actor)
+    }
+    core.info(`Final SSH users list: ${sshUsers.join(', ')}`)
+    // Fetch SSH keys for all specified users
+    const sshKeys = await fetchGitHubSSHKeys(sshUsers)
     if (sshKeys.length === 0) {
-      core.warning(`No SSH keys found for ${actor}`)
+      core.warning(`No SSH keys found for ${sshUsers.join(', ')}`)
     }
     // Add SSH keys to the runner's authorized_keys
     const sshDir = path.join(
