@@ -31296,7 +31296,7 @@ async function run() {
             coreExports.setFailed(`Unsupported platform: ${platform}`);
             return;
         }
-        const timeoutMinutes = parseInt(coreExports.getInput('timeout_minutes'), 10) || 30;
+        const timeoutMinutes = parseInt(coreExports.getInput('timeout_minutes'), 10);
         const timeoutMs = timeoutMinutes * 60 * 1000;
         const frpClientConfig = coreExports.getInput('frp_client_config');
         const { actor, apiUrl } = githubExports.context;
