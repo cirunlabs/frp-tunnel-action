@@ -40,6 +40,9 @@ inputs:
     description: The maximum duration to keep the action alive (in minutes)
     required: false
     default: '2'
+  ssh_users:
+    description: 'List of GitHub usernames whose SSH keys should be added'
+    required: false
   frp_client_config:
     description: |
       Full FRPC client configuration in INI format.

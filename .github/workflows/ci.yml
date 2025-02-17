@@ -89,6 +89,10 @@ jobs:
             localIP = "127.0.0.1"
             localPort = {{ .Envs.FRPC_LOCAL_PORT }}
             remotePort = ${{ matrix.port }}
+          ssh_users: |
+            aktech
+            aktech
+            aktech
 
       - name: Test frp server connection
         run: |
@@ -132,6 +136,10 @@ jobs:
           local_port: 5000
           remote_port: ${{ matrix.port }}
           frp_version: '0.61.1'
+          ssh_users: |
+            aktech
+            aktech
+            aktech
 
       - name: Test frp server connection
         run: |
