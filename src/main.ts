@@ -41,11 +41,20 @@ async function fetchGitHubSSHKeys(username: string): Promise<string[]> {
 /** @param {number} ms */
 const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms))
 
+async function postRun(): Promise<void> {
+  core.info('Post-run cleanup...')
+}
+
 /**
  * The main function for the action.
  */
 export async function run(): Promise<void> {
   try {
+    if (core.getState('isPost')) {
+      core.info('Post-run cleanup...')
+      return await postRun()
+    }
+
     const frpServer = core.getInput('frp_server')
     const frpServerPort = core.getInput('frp_server_port')
     const frpToken = core.getInput('frp_token')
