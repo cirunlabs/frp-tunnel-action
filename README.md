@@ -82,21 +82,21 @@ jobs:
         with:
           timeout_minutes: '60'
           frp_client_config: |
-            serverAddr = "{{ secrets.FRP_SERVER }}"
+            serverAddr = "${{ secrets.FRP_SERVER }}"
             serverPort = 7000
             auth.method = "token"
             auth.token = "${{ secrets.FRP_TOKEN }}"
 
             [[proxies]]
             name = "github-runner-ssh--${{ github.run_id }}-${{ github.sha }}"
-            type = tcp
+            type = "tcp"
             localIP = "127.0.0.1"
             localPort = 22
             remotePort = 6000
 
             [[proxies]]
             name = "github-runner-http--${{ github.run_id }}-${{ github.sha }}"
-            type = http
+            type = "tcp"
             localIP = "127.0.0.1"
             localPort = 8080
             remotePort = 8080
