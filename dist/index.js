@@ -31265,11 +31265,18 @@ async function fetchGitHubSSHKeys(username) {
 }
 /** @param {number} ms */
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+async function postRun() {
+    coreExports.info('Post-run cleanup...');
+}
 /**
  * The main function for the action.
  */
 async function run() {
     try {
+        if (coreExports.getState('isPost')) {
+            coreExports.info('Post-run cleanup...');
+            return await postRun();
+        }
         const frpServer = coreExports.getInput('frp_server');
         const frpServerPort = coreExports.getInput('frp_server_port');
         const frpToken = coreExports.getInput('frp_token');
