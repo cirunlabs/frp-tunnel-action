@@ -88,7 +88,7 @@ export async function run(): Promise<void> {
       core.setFailed(`Unsupported platform: ${platform}`)
       return
     }
-    const timeoutMinutes = parseInt(core.getInput('timeout_minutes'), 10) || 30
+    const timeoutMinutes = parseInt(core.getInput('timeout_minutes'), 10)
     const timeoutMs = timeoutMinutes * 60 * 1000
     const frpClientConfig = core.getInput('frp_client_config')
 
